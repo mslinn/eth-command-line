@@ -1,32 +1,24 @@
 # eth-command-line
+*A command line for interacting with Ethereum smart contracts and accounts.*
 
-### An instant-gratification command line for interacting with ethereum smart-contracts and accounts ###
-
-## Prerequisites
-
-You need a Java runtime environment installed on your machine. If you don't
-already have one, you can download a [JRE](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
-(or a full [Java Development Kit](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html))
-from Oracle.
-
-`eth-command-line` has been developed under Java 8, but will probably work under other Java versions.
-
-
-## Quick-Start
-
+## Quick Start
 1. Clone or download this project
 2. In the top-level project directory, make sure that the shell script `eth-command-line` has
-   execute permissions. (If not, on a Unix-like system, type `chmod +x ./eth-command-line`)
-3. Execute the shell script `eth-command-line`. The first time you do this, a whole bunch of
-   downloads will likely be triggered
-4. At the `eth-command-line ~> ` prompt, begin typing ethereum-related command. To see a list
+   execute permissions. (If not, on a Unix-like system, type `chmod +x ./eth-command-line`).
+   This is normally automatically done for you when you `git clone` the project.
+3. Execute the shell script `eth-command-line`. The first time you do this, many dependencies be downloaded.
+4. At the `eth ~> ` prompt, begin typing ethereum-related commands. To see a list
    of all commands, type `eth<tab>`. To see a description of all commands, type `tasks -V eth`
-5. For operations that require the payment of Ether, such as sending ether (`ethSendEther`) or
-   invoking state-changing smart-contract methods (`ethInvoke`), you will need to define the
-   ethereum address from which the operation will originate. You can create a new address using
-   `ethGenWalletV3` command.
+5. Before you can run tasks that require the payment of Ether, such as sending ether 
+   ([ethSendEther](https://mslinn.gitbooks.io/sbt-ethereum/content/gitbook/tasks.html#ethsendether)) or
+   invoking state-changing smart-contract tasks 
+   ([ethInvoke](https://mslinn.gitbooks.io/sbt-ethereum/content/gitbook/tasks.html#ethinvoke)), 
+   you will need to first define the ethereum address from which the operation will originate. 
+   You can create a new address using the
+   [ethKeystoreCreateWalletV3](https://mslinn.gitbooks.io/sbt-ethereum/content/gitbook/tasks.html#ethkeystorecreatewalletv3) 
+   task.
    ```
-   eth-command-line ~> ethGenWalletV3
+   eth ~> ethKeystoreCreateWalletV3
    [info] Generated keypair for address '0xc33071ead8753b04e0ee108cc168f2b22f93525d'
    [info] Generating V3 wallet, alogorithm=scrypt, n=262144, r=8, p=1, dklen=32
    Enter passphrase for new wallet: *******************
@@ -35,15 +27,14 @@ from Oracle.
 
    ```
    You can also import existing `geth` wallets into the `sbt-ethereum` repository directory.
-   See the [sbt-ethereum docs](https://github.com/swaldman/sbt-ethereum/blob/master/README.md).
+   See the [sbt-ethereum docs](https://mslinn.gitbooks.io/sbt-ethereum/content/).
 
-   **Be sure to back up your `sbt-ethereum` repository directory to avoid losing your wallets
-   and accounts!**
-6. Once you have a generated or imported a wallet (and transferred some Eth to its account),
-   tell `eth-command-line` to use that account for fund transfers or method invocations by
-   calling the following command...
+   *Be sure to back up your `sbt-ethereum` repository directory to avoid losing your wallets
+   and accounts!* (TODO How?)
+6. Once you have a generated or imported a wallet and transferred some Eth to its account,
+   set `eth-command-line` to use that account for fund transfers or method invocations as shown in this example:
    ```
-   eth-command-line ~> set ethAddress := "0xc33071ead8753b04e0ee108cc168f2b22f93525d"
+   eth ~> set ethAddress := "0xc33071ead8753b04e0ee108cc168f2b22f93525d"
 
    ```
    ...but using your own Ethereum address of course!
@@ -52,25 +43,29 @@ from Oracle.
 ## Introduction
 
 `eth-command-line` is just a thin wrapper around [sbt-ethereum](https://github.com/swaldman/sbt-ethereum).
-For full documentation, please see that project's [README.md](https://github.com/swaldman/sbt-ethereum/blob/master/README.md) file.
+For full documentation, please see [sbt-ethereum docs](https://mslinn.gitbooks.io/sbt-ethereum/content/).
 
-To use [sbt-ethereum](https://github.com/swaldman/sbt-ethereum) directly, you have to go through
-the ceremony of setting up a project directory and run a synced ethereum node. This project takes care of that for you.
+Before [sbt-ethereum](https://github.com/swaldman/sbt-ethereum) can be used,
+a project directory needs to be set up and a synced ethereum node needs to be available. 
+`eth-command-line` takes care of that for you.
 
-In order for the instant gratification thing to work, this application is preconfigured to interact with a public
-Ethereum node at `http://ethjsonrpc.mchange.com:8545/` When you are ready to sync the blockchain and run your own node,
-you should probably graduate to using [sbt-ethereum](https://github.com/swaldman/sbt-ethereum) directly. **No guarantees are
-made about how long our Ethereum node will be exposed for public use!** But for now, come play.
+This application is preconfigured to interact with a public Ethereum node at `http://ethjsonrpc.mchange.com:8545/`. 
+When you are ready to run your own node and sync it to the blockchain, you should probably graduate to using 
+[sbt-ethereum](https://github.com/swaldman/sbt-ethereum) directly.
+No guarantees are made about how long our Ethereum node will be exposed for public use!
+But for now, come play.
 
-### Quick Example: Import a contract ABI and call a constant method of a smart contract to check its state
+### Quick Example
+Here is how you can import a contract ABI and call a constant method of a smart contract to check its state.
 
 ```
-eth-command-line ~> ethMemorizeAbi
+eth ~> ethMemorizeAbi
 Contract address in hex: 0x5c9a9820d404481000c1d85fb620852e105a1904
 Contract ABI: [{"name":"sayHello","inputs":[],"outputs":[{"name":"","type":"string"}],"constant":true,"type":"function"}]
 [info] ABI is now known for the contract at address 5c9a9820d404481000c1d85fb620852e105a1904
 [success] Total time: 37 s, completed Dec 29, 2016 9:33:13 AM
-eth-command-line ~> ethCallEphemeral 0x5c9a9820d404481000c1d85fb620852e105a1904 sayHello
+
+eth ~> ethCallEphemeral 0x5c9a9820d404481000c1d85fb620852e105a1904 sayHello
 [info] Call data for function call: ef5fb05b
 [info] Gas estimated for function call: 26259
 [info] Raw result of call to function 'sayHello': 0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000d48656c6c6f2c20776f726c642100000000000000000000000000000000000000
@@ -79,15 +74,13 @@ eth-command-line ~> ethCallEphemeral 0x5c9a9820d404481000c1d85fb620852e105a1904 
 [success] Total time: 1 s, completed Dec 30, 2016 7:41:54 AM
 ```
 
-## Tab completion is your friend.
+## Tab Completion
+`eth-command-line` tasks support <tab> completion extensively.
+When in doubt, just hit <tab> a few times in quick succession, and you will see what your options are at that point.
 
-If you try to type everything in, you will find this to be an annoyingly verbose
-command line interface. `eth-command-line` tasks support <tab> completion *extensively*. **When in doubt, just hit <tab>
-a few times in quick succession, and maybe things will get clearer.**
+## Common Operations
 
-## Links to documentation of common operations
-
-* [Sending ether](https://github.com/swaldman/sbt-ethereum/blob/master/README.md#sending-ether)
+* [Sending ether](https://mslinn.gitbooks.io/sbt-ethereum/content/gitbook/tasks.html#ethsender)
 * [Interacting with deployed smart contracts](https://github.com/swaldman/sbt-ethereum/blob/master/README.md#interacting-with-deployed-smart-contracts)
 * [Generating accounts and wallets](https://github.com/swaldman/sbt-ethereum/blob/master/README.md#generating-accounts-and-wallets)
 * [Managing the sbt-ethereum repository](https://github.com/swaldman/sbt-ethereum/blob/master/README.md#the-sbt-ethereum-repository)
