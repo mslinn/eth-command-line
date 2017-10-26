@@ -5,7 +5,19 @@ name := "eth-command-line"
 
 version := "0.1.0"
 
-promptTheme := PromptTheme( Seq( text("\neth ~> ", NoStyle) ) )
+// See https://github.com/agemooij/sbt-prompt
+promptTheme :=
+  PromptTheme(List(
+    text("\n eth ", fg(green)),
+//    userName(fg(26)),
+//    text("@", fg(green)),
+//    hostName(fg(26)),
+    text(" on ", fg(magenta)),
+    gitBranch(clean = fg(green), dirty = fg(yellow)),
+    text(" in ", fg(magenta)),
+    currentProject(fg(red)),
+    text("> ", fg(magenta))
+  ))
 
 
 // The remainder of this file defines the Ethereum node that this command-line client will interact with.
