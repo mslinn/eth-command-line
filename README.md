@@ -1,7 +1,8 @@
 # eth-command-line
 *A command line for interacting with Ethereum smart contracts and accounts.*
 
-`eth-command-line` is just a thin wrapper around [sbt-ethereum](https://github.com/swaldman/sbt-ethereum).
+`eth-command-line` is just an SBT project that incorporates the [sbt-ethereum](https://github.com/swaldman/sbt-ethereum) SBT plugin.
+This project can also be used as the basis for integrating custom Scala code and Solidity code.
 For full documentation, please see [sbt-ethereum docs](https://mslinn.gitbooks.io/sbt-ethereum/content/).
 
 ## Common Operations

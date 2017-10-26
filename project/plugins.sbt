@@ -3,4 +3,6 @@ resolvers += ("snapshots" at "https://oss.sonatype.org/content/repositories/snap
 
 addSbtPlugin("com.mchange" % "sbt-ethereum" % "latest.snapshot" changing())
 addSbtPlugin("com.scalapenos" % "sbt-prompt" % "1.0.0")
-addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC12")
+
+// TODO always load unless running on windows
+//addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC12")
